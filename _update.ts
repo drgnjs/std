@@ -65,5 +65,83 @@ await build({
   postBuild() {
     Deno.copyFileSync('license', 'npm/license')
     Deno.copyFileSync('readme.md', 'npm/readme.md')
+
+    // deno-lint-ignore no-unused-vars
+    const { main, module, ...packageJson } = JSON.parse(Deno.readTextFileSync('./npm/package.json'))
+
+    packageJson.exports = {
+      './encoding': {
+        'import': {
+          'default': './esm/encoding.js',
+          'types': './esm/encoding.d.ts'
+        },
+        'require': {
+          'default': './script/encoding.js',
+          'types': './script/encoding.d.ts'
+        }
+      },
+      './jsonc': {
+        'import': {
+          'default': './esm/jsonc.js',
+          'types': './esm/jsonc.d.ts'
+        },
+        'require': {
+          'default': './script/jsonc.js',
+          'types': './script/jsonc.d.ts'
+        }
+      },
+      './msgpack': {
+        'import': {
+          'default': './esm/msgpack.js',
+          'types': './esm/msgpack.d.ts'
+        },
+        'require': {
+          'default': './script/msgpack.js',
+          'types': './script/msgpack.d.ts'
+        }
+      },
+      './toml': {
+        'import': {
+          'default': './esm/toml.js',
+          'types': './esm/toml.d.ts'
+        },
+        'require': {
+          'default': './script/toml.js',
+          'types': './script/toml.d.ts'
+        }
+      },
+      './ulid': {
+        'import': {
+          'default': './esm/ulid.js',
+          'types': './esm/ulid.d.ts'
+        },
+        'require': {
+          'default': './script/ulid.js',
+          'types': './script/ulid.d.ts'
+        }
+      },
+      './uuid': {
+        'import': {
+          'default': './esm/uuid.js',
+          'types': './esm/uuid.d.ts'
+        },
+        'require': {
+          'default': './script/uuid.js',
+          'types': './script/uuid.d.ts'
+        }
+      },
+      './yaml': {
+        'import': {
+          'default': './esm/yaml.js',
+          'types': './esm/yaml.d.ts'
+        },
+        'require': {
+          'default': './script/yaml.js',
+          'types': './script/yaml.d.ts'
+        }
+      }
+    }
+
+    Deno.writeTextFileSync('./npm/package.json', JSON.stringify(packageJson, null, 2))
   }
 })
