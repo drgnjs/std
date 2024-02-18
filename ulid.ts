@@ -1,1 +1,1 @@
-export * as ulid from './third_party/deno.land/std/ulid/mod.ts'
+export * from './third_party/deno.land/std/ulid/mod.ts'
