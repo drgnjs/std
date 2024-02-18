@@ -1,0 +1,38 @@
+name: update
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.40
+
+      - name: 'Update package'
+        run: deno run -A _update.ts
+
+      - name: 'Publish package'
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: 'public'
+          package: './npm'
+
+      - name: 'Commit changes'
+        run: |
+          git config --global user.name 'GitHub'
+          git config --global user.email 'noreply@github.com'
+          git commit -am "refactor: update library"
+          git push
