@@ -1,1 +1,1 @@
-export * from './third_party/deno.land/std/jsonc/mod.ts'
+export * as jsonc from './third_party/deno.land/std/jsonc/mod.ts'
