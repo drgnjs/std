@@ -2,18 +2,12 @@ import { build, emptyDir } from 'https://deno.land/x/dnt@0.40.0/mod.ts'
 
 await emptyDir('third_party')
 
-const tagName = await (async function getTagNameOfLatestRelease() {
-  const res = await fetch('https://api.github.com/repos/denoland/deno_std/releases/latest')
-
-  const json = await res.json()
-
-  return json.tag_name as string
-})()
+const version = Deno.args[0]
 
 async function updateVersion() {
   const { VERSION } = await import('./_.ts')
 
-  await Deno.writeTextFile('./_.ts', (await Deno.readTextFile('./_.ts')).replaceAll(VERSION, tagName))
+  await Deno.writeTextFile('./_.ts', (await Deno.readTextFile('./_.ts')).replaceAll(VERSION, version))
 }
 
 await updateVersion()
@@ -50,7 +44,7 @@ await build({
   shims: {},
   package: {
     name: '@drgn/std',
-    version: tagName,
+    version,
     license: 'Unlicense',
     engines: {
       node: '>=20'
