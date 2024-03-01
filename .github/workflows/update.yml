@@ -2,7 +2,7 @@ name: update
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: 0 0 * * *
   workflow_dispatch:
 
 jobs:
@@ -23,19 +23,20 @@ jobs:
         with:
           deno-version: v1.40
 
-      - name: 'Update package'
+      - name: Update Package
         run: deno run -A _update.ts
 
-      - name: 'Publish package'
+      - name: Publish Package
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          access: 'public'
-          package: './npm'
+          access: public
+          package: ./npm
 
-      - name: 'Commit changes'
+      - name: Commit Changes
+        continue-on-error: true
         run: |
-          git config --global user.name 'GitHub'
-          git config --global user.email 'noreply@github.com'
-          git commit -am "refactor: update library"
+          git config --global user.name "GitHub"
+          git config --global user.email "noreply@github.com"
+          git commit -am "refactor: autoupdate"
           git push
